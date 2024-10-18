@@ -7,6 +7,12 @@ trigger:
   # Trigger pipeline on commits to main branch
 - main
 
+resources:
+  repositories:
+    - repository: infra-aks-demo
+      type: github
+      endpoint: nellyk
+      name: nellyk/infra-aks-demo
 variables:
   # Ubuntu-latest image is used for building and deploying the app
   vmImageName: 'ubuntu-latest'
