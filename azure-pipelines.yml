@@ -60,7 +60,7 @@ stages:
       - task: replacetokens@6
         displayName: Replace the build files token
         inputs:
-          root: '$(Build.ArtifactStagingDirectory)/infra-aks-demo'
+          root: '$(Build.ArtifactStagingDirectory)/infra-aks-demo/base'
           sources: |
             order-service.yaml
             product-service.yaml
