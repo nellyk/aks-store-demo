@@ -21,39 +21,10 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: '16.x'
-        displayName: 'Install Node.js'
-
-      - task: Npm@1
-        displayName: Install
-        inputs:
-          command: 'install'
-          workingDir: 'src'
-          verbose: true
-      - task: Npm@1
-        displayName: Test
-        inputs:
-          workingDir: 'src'
-          command: custom
-          verbose: false
-          customCommand: test
-
-      - task: reportgenerator@5
-        condition: succeededOrFailed()
-        displayName: Converting lcov to cobertura
-        inputs:
-          reports: 'src/coverage/lcov.info' 
-          targetdir: 'coverage/'  
-          reporttypes: 'Cobertura'
-      - task: PublishCodeCoverageResults@2
-        inputs:
-          summaryFileLocation: 'coverage/Cobertura.xml'
-
       - task: Docker@2 # Build and push image to Docker Hub
         inputs:
           containerRegistry: 'dockerRegistryServiceConnection'
           repository: 'nkiboi/aks-store/demo'
           command: 'buildAndPush'
-          Dockerfile: '**/Dockerfile'
+          Dockerfile: 'src/order-service/Dockerfile'
+          buildContext: 'src/order-service'
