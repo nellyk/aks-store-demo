@@ -10,7 +10,10 @@ resources:
       type: github
       endpoint: nellyk
       name: nellyk/infra-aks-demo
-
+variables:
+  - name: artifactName
+    value: deployment
+  
 stages:
 - stage: Build_Test
   displayName: Build & Test project
@@ -23,7 +26,6 @@ stages:
   # Ubuntu-latest image is used for building and deploying the app
       vmImageName: 'ubuntu-latest'
       buildid: $(Build.BuildId)
-      deploymentFolder: $(Build.Repository.LocalPath)
     steps:
       - checkout: self
       - checkout: infra-aks-demo
@@ -48,7 +50,7 @@ stages:
       - task: CopyFiles@2
         displayName: Copy the kustomize files
         inputs:
-            sourceFolder: $(deploymentFolder)/infra-aks-demo
+            sourceFolder: $(Build.Repository.LocalPath)/infra-aks-demo
             contents: "**"
             targetFolder: $(Build.ArtifactStagingDirectory)
             overwrite: true
