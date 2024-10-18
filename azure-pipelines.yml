@@ -52,7 +52,7 @@ stages:
         inputs:
             sourceFolder: $(Build.Repository.LocalPath)/infra-aks-demo
             contents: "**"
-            targetFolder: $(Build.ArtifactStagingDirectory)
+            targetFolder: $(Build.ArtifactStagingDirectory)/infra-aks-demo
             overwrite: true
       - task: replacetokens@6
         displayName: Replace the build files token
