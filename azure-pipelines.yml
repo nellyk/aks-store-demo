@@ -11,11 +11,6 @@ resources:
       endpoint: nellyk
       name: nellyk/infra-aks-demo
 
-variables:
-  # Ubuntu-latest image is used for building and deploying the app
-  vmImageName: 'ubuntu-latest'
-  buildid: $(Build.BuildId)
-  deploymentFolder: $(Build.Repository.LocalPath)/infra-aks-demo/
 
 stages:
 - stage: Build_Test
@@ -25,6 +20,11 @@ stages:
     displayName: Build
     pool:
       vmImage: $(vmImageName)
+    variables:
+  # Ubuntu-latest image is used for building and deploying the app
+      vmImageName: 'ubuntu-latest'
+      buildid: $(Build.BuildId)
+      deploymentFolder: $(Build.Repository.LocalPath)/infra-aks-demo/
     steps:
       - task: Docker@2 # Build and push image to Docker Hub
         displayName: Build and push order-service image to Docker Hub
