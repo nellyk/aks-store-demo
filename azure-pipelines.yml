@@ -35,8 +35,8 @@ stages:
           containerRegistry: 'dockerRegistryServiceConnection'
           repository: 'nkiboi/order-service'
           command: 'buildAndPush'
-          Dockerfile:  'order-service/Dockerfile'
-          buildContext: 'order-service'
+          Dockerfile:  $(Build.Repository.LocalPath)/aks-store-demo/order-service/Dockerfile
+          buildContext: $(Build.Repository.LocalPath)/aks-store-demo/order-service
       # - task: Docker@2 # Build and push image to Docker Hub
       #   displayName: Build and push product-service image to Docker Hub
       #   inputs:
