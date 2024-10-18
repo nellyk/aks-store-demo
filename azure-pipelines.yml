@@ -1,0 +1,59 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  # Trigger pipeline on commits to main branch
+- main
+
+variables:
+  # Ubuntu-latest image is used for building and deploying the app
+  vmImageName: 'ubuntu-latest'
+
+
+stages:
+- stage: Build_Test
+  displayName: Build & Test project
+  jobs:
+  - job: Build # Build the app and run tests
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '16.x'
+        displayName: 'Install Node.js'
+
+      - task: Npm@1
+        displayName: Install
+        inputs:
+          command: 'install'
+          workingDir: 'src'
+          verbose: true
+      - task: Npm@1
+        displayName: Test
+        inputs:
+          workingDir: 'src'
+          command: custom
+          verbose: false
+          customCommand: test
+
+      - task: reportgenerator@5
+        condition: succeededOrFailed()
+        displayName: Converting lcov to cobertura
+        inputs:
+          reports: 'src/coverage/lcov.info' 
+          targetdir: 'coverage/'  
+          reporttypes: 'Cobertura'
+      - task: PublishCodeCoverageResults@2
+        inputs:
+          summaryFileLocation: 'coverage/Cobertura.xml'
+
+      - task: Docker@2 # Build and push image to Docker Hub
+        inputs:
+          containerRegistry: 'dockerRegistryServiceConnection'
+          repository: 'nkiboi/aks-store/demo'
+          command: 'buildAndPush'
+          Dockerfile: '**/Dockerfile'
