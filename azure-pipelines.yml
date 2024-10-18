@@ -99,7 +99,7 @@ stages:
                   displayName: Commit to Deployment repo
                   inputs:
                     targetType: "inline"
-                    workingDirectory: $(Build.Repository.LocalPath)/infra-aks-demo
+                    workingDirectory: $(Build.Repository.LocalPath)
                     script: |
                       git config user.email "3062772+nellyk@users.noreply.github.com"
                       git config user.name "build"
