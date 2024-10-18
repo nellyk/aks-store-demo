@@ -24,7 +24,7 @@ stages:
       - task: Docker@2 # Build and push image to Docker Hub
         inputs:
           containerRegistry: 'dockerRegistryServiceConnection'
-          repository: 'nkiboi/aks-store/demo'
+          repository: 'nkiboi/aks-store-demo'
           command: 'buildAndPush'
           Dockerfile: 'src/order-service/Dockerfile'
           buildContext: 'src/order-service'
