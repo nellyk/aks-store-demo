@@ -72,6 +72,13 @@ pub fn fetch_products(_settings: &Settings) -> Vec<Product> {
             price: 5.99,
             description: "Ensure your furry friend stays safe during water adventures with the Ahoy Doggy Life Jacket. Designed for dogs, this flotation device offers buoyancy and visibility in style.".to_string(),
             image: "/lifejacket.jpg".to_string()
+        },
+        Product {
+            id: 11,
+            name: "A Kenyan Coffee".to_string(),
+            price: 1.0,
+            description: "Tastes great and i highly recommend it".to_string(),
+            image: "/lifejacket.jpg".to_string()
         }
     ]
 }
