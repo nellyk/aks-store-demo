@@ -1,7 +1,4 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+# Thanks to for the reference https://github.com/rceraline/devops/blob/main/2023-12-aks-argocd-pipeline/Application/azure-pipelines.yml
 
 trigger:
   # Trigger pipeline on commits to main branch
@@ -13,11 +10,12 @@ resources:
       type: github
       endpoint: nellyk
       name: nellyk/infra-aks-demo
+
 variables:
   # Ubuntu-latest image is used for building and deploying the app
   vmImageName: 'ubuntu-latest'
   buildid: $(Build.BuildId)
-
+  deploymentFolder: $(Build.Repository.LocalPath)/infra-aks-demo/
 
 stages:
 - stage: Build_Test
@@ -44,8 +42,59 @@ stages:
             command: 'buildAndPush'
             Dockerfile:  'product-service/Dockerfile'
             buildContext: 'product-service'
+      - task: CopyFiles@2
+        displayName: Copy the kustomize files
+        inputs:
+            sourceFolder: $(deploymentFolder)
+            contents: "**"
+            targetFolder: $(Build.ArtifactStagingDirectory)
+            overwrite: true
       - task: replacetokens@6
+        displayName: Replace the build files token
         inputs:
           sources: |
             order-service.yaml
             product-service.yaml
+      - publish: $(Build.ArtifactStagingDirectory)
+        artifact: $(artifactName)
+- stage: dev
+  jobs:
+    - deployment: dev
+      environment:
+          name: aksdev
+
+      pool:
+          vmImage: "ubuntu-latest"
+      strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: infra-aks-demo
+                  persistCredentials: true
+                  clean: true
+
+                - task: DownloadPipelineArtifact@2
+                  inputs:
+                    artifact: $(artifactName)
+                    patterns: |
+                      base/**
+                      overlays/dev/**
+
+                    path: $(Build.Repository.LocalPath)/
+
+                - task: PowerShell@2
+                  displayName: Commit to Deployment repo
+                  inputs:
+                    targetType: "inline"
+                    workingDirectory: $(Build.Repository.LocalPath)
+                    script: |
+                      git config user.email "3062772+nellyk@users.noreply.github.com"
+                      git config user.name "build"
+                      git stash
+                      git remote update
+                      git fetch
+                      git checkout --track origin/main
+                      git stash pop
+                      git add .
+                      git commit -m "$(BUILDID): dev deployment"
+                      git push origin HEAD:main
