@@ -26,5 +26,5 @@ stages:
           containerRegistry: 'dockerRegistryServiceConnection'
           repository: 'nkiboi/aks-store-demo'
           command: 'buildAndPush'
-          Dockerfile: 'order-service/Dockerfile'
+          Dockerfile:  '**/Dockerfile'
           buildContext: 'src/order-service'
