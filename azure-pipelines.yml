@@ -6,7 +6,7 @@ trigger:
 
 resources:
   repositories:
-    - repository: infra-aks-demo
+    - repository: infra-repo
       type: github
       endpoint: nellyk
       name: nellyk/infra-aks-demo
@@ -34,14 +34,14 @@ stages:
           command: 'buildAndPush'
           Dockerfile:  'order-service/Dockerfile'
           buildContext: 'order-service'
-      - task: Docker@2 # Build and push image to Docker Hub
-        displayName: Build and push product-service image to Docker Hub
-        inputs:
-            containerRegistry: 'dockerRegistryServiceConnection'
-            repository: 'nkiboi/product-service'
-            command: 'buildAndPush'
-            Dockerfile:  'product-service/Dockerfile'
-            buildContext: 'product-service'
+      # - task: Docker@2 # Build and push image to Docker Hub
+      #   displayName: Build and push product-service image to Docker Hub
+      #   inputs:
+      #       containerRegistry: 'dockerRegistryServiceConnection'
+      #       repository: 'nkiboi/product-service'
+      #       command: 'buildAndPush'
+      #       Dockerfile:  'product-service/Dockerfile'
+      #       buildContext: 'product-service'
       - task: CopyFiles@2
         displayName: Copy the kustomize files
         inputs:
@@ -69,7 +69,7 @@ stages:
           runOnce:
             deploy:
               steps:
-                - checkout: infra-aks-demo
+                - checkout: infra-repo
                   persistCredentials: true
                   clean: true
 
