@@ -24,7 +24,7 @@ stages:
   # Ubuntu-latest image is used for building and deploying the app
       vmImageName: 'ubuntu-latest'
       buildid: $(Build.BuildId)
-      deploymentFolder: $(Build.Repository.LocalPath)/infra-aks-demo/
+      deploymentFolder: $(Build.Repository.LocalPath)
     steps:
       - task: Docker@2 # Build and push image to Docker Hub
         displayName: Build and push order-service image to Docker Hub
@@ -80,7 +80,7 @@ stages:
                       base/**
                       overlays/dev/**
 
-                    path: $(Build.Repository.LocalPath)/
+                    path: $(Build.Repository.LocalPath)
 
                 - task: PowerShell@2
                   displayName: Commit to Deployment repo
