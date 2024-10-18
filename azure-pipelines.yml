@@ -10,6 +10,7 @@ trigger:
 variables:
   # Ubuntu-latest image is used for building and deploying the app
   vmImageName: 'ubuntu-latest'
+  buildid: $(Build.BuildId)
 
 
 stages:
@@ -37,3 +38,8 @@ stages:
             command: 'buildAndPush'
             Dockerfile:  'product-service/Dockerfile'
             buildContext: 'product-service'
+      - task: replacetokens@6
+        inputs:
+          sources: |
+            order-service.yaml
+            product-service.yaml
