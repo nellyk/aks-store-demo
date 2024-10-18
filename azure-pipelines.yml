@@ -93,10 +93,6 @@ stages:
                 - task: DownloadPipelineArtifact@2
                   inputs:
                     artifact: $(artifactName)
-                    patterns: |
-                      base/**
-                      overlays/dev/**
-
                     path: $(Build.Repository.LocalPath)/infra-aks-demo
 
                 - task: PowerShell@2
@@ -113,5 +109,5 @@ stages:
                       git checkout --track origin/main
                       git stash pop
                       git add .
-                      git commit -m "$(BUILDID): dev deployment"
+                      git commit -m "$(Build.BuildId): dev deployment"
                       git push origin HEAD:main
