@@ -27,4 +27,4 @@ stages:
           repository: 'nkiboi/aks-store-demo'
           command: 'buildAndPush'
           Dockerfile:  '**/Dockerfile'
-          buildContext: 'src/order-service'
+          buildContext: 'order-service'
