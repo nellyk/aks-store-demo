@@ -25,7 +25,7 @@ stages:
         displayName: Build and push order-service image to Docker Hub
         inputs:
           containerRegistry: 'dockerRegistryServiceConnection'
-          repository: 'nkiboi/aks-store/order-service'
+          repository: 'nkiboi/order-service'
           command: 'buildAndPush'
           Dockerfile:  '**/Dockerfile'
           buildContext: 'order-service'
@@ -33,7 +33,7 @@ stages:
         displayName: Build and push product-service image to Docker Hub
         inputs:
             containerRegistry: 'dockerRegistryServiceConnection'
-            repository: 'nkiboi/aks-store/product-service'
+            repository: 'nkiboi/product-service'
             command: 'buildAndPush'
             Dockerfile:  '**/Dockerfile'
             buildContext: 'product-service'
