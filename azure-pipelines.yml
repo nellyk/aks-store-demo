@@ -39,6 +39,9 @@ stages:
           command: 'buildAndPush'
           Dockerfile:  $(Build.Repository.LocalPath)/aks-store-demo/order-service/Dockerfile
           buildContext: $(Build.Repository.LocalPath)/aks-store-demo/order-service
+          tags: |
+                $(Build.BuildId)
+                latest
       # - task: Docker@2 # Build and push image to Docker Hub
       #   displayName: Build and push product-service image to Docker Hub
       #   inputs:
@@ -61,6 +64,13 @@ stages:
           sources: |
             order-service.yaml
             product-service.yaml
+          tokenPattern: 'custom'
+          tokenPrefix: '#{'
+          tokenSuffix: '}#'
+          addBOM: true
+          missingVarAction: 'keep'
+          missingVarLog: 'error'
+          ifNoFilesFound: 'error'
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: $(artifactName)
 - stage: dev
