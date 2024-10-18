@@ -22,16 +22,18 @@ stages:
       vmImage: $(vmImageName)
     steps:
       - task: Docker@2 # Build and push image to Docker Hub
+        displayName: Build and push order-service image to Docker Hub
         inputs:
           containerRegistry: 'dockerRegistryServiceConnection'
-          repository: 'nkiboi/aks-store-demo/order-service'
+          repository: 'nkiboi/aks-store/order-service'
           command: 'buildAndPush'
           Dockerfile:  '**/Dockerfile'
           buildContext: 'order-service'
       - task: Docker@2 # Build and push image to Docker Hub
+        displayName: Build and push product-service image to Docker Hub
         inputs:
             containerRegistry: 'dockerRegistryServiceConnection'
-            repository: 'nkiboi/aks-store-demo/product-service'
+            repository: 'nkiboi/aks-store/product-service'
             command: 'buildAndPush'
             Dockerfile:  '**/Dockerfile'
             buildContext: 'product-service'
