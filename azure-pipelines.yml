@@ -27,7 +27,7 @@ stages:
           containerRegistry: 'dockerRegistryServiceConnection'
           repository: 'nkiboi/order-service'
           command: 'buildAndPush'
-          Dockerfile:  '**/Dockerfile'
+          Dockerfile:  'order-service/Dockerfile'
           buildContext: 'order-service'
       - task: Docker@2 # Build and push image to Docker Hub
         displayName: Build and push product-service image to Docker Hub
@@ -35,5 +35,5 @@ stages:
             containerRegistry: 'dockerRegistryServiceConnection'
             repository: 'nkiboi/product-service'
             command: 'buildAndPush'
-            Dockerfile:  '**/Dockerfile'
+            Dockerfile:  'product-service/Dockerfile'
             buildContext: 'product-service'
