@@ -23,7 +23,7 @@ stages:
   # Ubuntu-latest image is used for building and deploying the app
       vmImageName: 'ubuntu-latest'
       buildid: $(Build.BuildId)
-      deploymentFolder: $(Build.Repository.LocalPath)/infra-aks-demo
+      deploymentFolder: $(Build.Repository.LocalPath)
     steps:
       - checkout: self
       - checkout: infra-aks-demo
@@ -48,13 +48,14 @@ stages:
       - task: CopyFiles@2
         displayName: Copy the kustomize files
         inputs:
-            sourceFolder: $(deploymentFolder)
+            sourceFolder: $(deploymentFolder)/infra-aks-demo
             contents: "**"
             targetFolder: $(Build.ArtifactStagingDirectory)
             overwrite: true
       - task: replacetokens@6
         displayName: Replace the build files token
         inputs:
+          root: '$(Build.ArtifactStagingDirectory)/infra-aks-demo'
           sources: |
             order-service.yaml
             product-service.yaml
