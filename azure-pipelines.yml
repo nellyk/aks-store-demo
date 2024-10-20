@@ -71,7 +71,7 @@ stages:
           missingVarAction: 'keep'
           missingVarLog: 'error'
           ifNoFilesFound: 'error'
-      - publish: $(Build.ArtifactStagingDirectory)
+      - publish: $(Build.ArtifactStagingDirectory)/infra-aks-demo/base
         artifact: $(artifactName)
 - stage: dev
   jobs:
@@ -93,13 +93,13 @@ stages:
                 - task: DownloadPipelineArtifact@2
                   inputs:
                     artifact: $(artifactName)
-                    path: $(Build.Repository.LocalPath)/infra-aks-demo
+                    path: $(Build.Repository.LocalPath)/infra-aks-demo/base
 
                 - task: PowerShell@2
                   displayName: Commit to Deployment repo
                   inputs:
                     targetType: "inline"
-                    workingDirectory: $(Build.Repository.LocalPath)
+                    workingDirectory: $(Build.Repository.LocalPath)/infra-aks-demo/base
                     script: |
                       git config user.email "3062772+nellyk@users.noreply.github.com"
                       git config user.name "build"
