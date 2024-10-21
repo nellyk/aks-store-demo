@@ -57,6 +57,7 @@ stages:
             contents: "**"
             targetFolder: $(Build.ArtifactStagingDirectory)/infra-aks-demo
             overwrite: true
+            
       - task: replacetokens@6
         displayName: Replace the build files token
         inputs:
@@ -65,8 +66,7 @@ stages:
             order-service.yaml
             product-service.yaml
           tokenPattern: 'custom'
-          tokenPrefix: '#{'
-          tokenSuffix: '}#'
+          tokenPrefix: 'image:'
           addBOM: true
           missingVarAction: 'keep'
           missingVarLog: 'error'
