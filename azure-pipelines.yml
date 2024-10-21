@@ -57,20 +57,24 @@ stages:
             contents: "**"
             targetFolder: $(Build.ArtifactStagingDirectory)/infra-aks-demo
             overwrite: true
-      - task: replacetokens@6
-        displayName: Replace the build files token
-        inputs:
-          root: '$(Build.ArtifactStagingDirectory)/infra-aks-demo/base'
-          sources: |
-            order-service.yaml
-            product-service.yaml
-          tokenPattern: 'custom'
-          tokenPrefix: '#{'
-          tokenSuffix: '}#'
-          addBOM: true
-          missingVarAction: 'keep'
-          missingVarLog: 'error'
-          ifNoFilesFound: 'error'
+      # - task: replacetokens@6
+      #   displayName: Replace the build files token
+      #   inputs:
+      #     root: '$(Build.ArtifactStagingDirectory)/infra-aks-demo/base'
+      #     sources: |
+      #       order-service.yaml
+      #       product-service.yaml
+      #     tokenPattern: 'custom'
+      #     tokenPrefix: '#{'
+      #     tokenSuffix: '}#'
+      #     addBOM: true
+      #     missingVarAction: 'keep'
+      #     missingVarLog: 'error'
+      #     ifNoFilesFound: 'error'
+      - script: |
+          sed -i "s|image:.*|image: $(ACR_REGISTRY_NAME)/$(IMAGE_NAME):$(IMAGE_TAG)|g" $(Build.ArtifactStagingDirectory)/infra-aks-demo/base/order-service.yaml
+          sed -i "s|image:.*|image: $(ACR_REGISTRY_NAME)/$(IMAGE_NAME):$(IMAGE_TAG)|g" $(Build.ArtifactStagingDirectory)/infra-aks-demo/base/product-service.yaml
+        displayName: 'Update image tag in Kubernetes manifest files'
       - publish: $(Build.ArtifactStagingDirectory)/infra-aks-demo/base
         artifact: $(artifactName)
 - stage: dev
