@@ -48,8 +48,8 @@ stages:
             containerRegistry: 'dockerRegistryServiceConnection'
             repository: 'nkiboi/product-service'
             command: 'buildAndPush'
-            Dockerfile:  'product-service/Dockerfile'
-            buildContext: 'product-service'
+            Dockerfile:   $(Build.Repository.LocalPath)/aks-store-demo/product-service/Dockerfile
+            buildContext: $(Build.Repository.LocalPath)/aks-store-demo/product-service
       - task: CopyFiles@2
         displayName: Copy the kustomize files
         inputs:
