@@ -72,8 +72,8 @@ stages:
       #     missingVarLog: 'error'
       #     ifNoFilesFound: 'error'
       - script: |
-          sed -i "s|image:.*|image: docker.io/nkiboi/order-service:$(buildid)|g" $(Build.ArtifactStagingDirectory)/infra-aks-demo/base/order-service.yaml
-          sed -i "s|image:.*|image: docker.io/nkiboi/product-service:$(buildid)|g" $(Build.ArtifactStagingDirectory)/infra-aks-demo/base/product-service.yaml
+          sed -i "s|image: docker.io/nkiboi.*|image: docker.io/nkiboi/order-service:$(buildid)|g" $(Build.ArtifactStagingDirectory)/infra-aks-demo/base/order-service.yaml
+          sed -i "s|image: docker.io/nkiboi.*|image: docker.io/nkiboi/product-service:$(buildid)|g" $(Build.ArtifactStagingDirectory)/infra-aks-demo/base/product-service.yaml
         displayName: 'Update image tag to $(buildid) in Kubernetes manifest files'
       - publish: $(Build.ArtifactStagingDirectory)/infra-aks-demo/base
         artifact: $(artifactName)
